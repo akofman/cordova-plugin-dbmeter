@@ -23,10 +23,10 @@ import java.util.TimerTask;
 public class DBMeter extends CordovaPlugin {
 
     private static final String LOG_TAG = "DBMeter";
-    private AudioRecord audioRecord;
-    private short[] buffer;
-    private Timer timer;
-    private boolean isListening = false;
+    private static AudioRecord audioRecord;
+    private static short[] buffer;
+    private static Timer timer;
+    private static boolean isListening = false;
     public static final int REQ_CODE = 0;
 
     public DBMeter() {
@@ -67,11 +67,11 @@ public class DBMeter extends CordovaPlugin {
             buffer = new short[bufferSize];
         }
 
-        if (!this.isListening) {
-            this.isListening = true;
-            this.audioRecord.startRecording();
+        if (!isListening) {
+            isListening = true;
+            audioRecord.startRecording();
 
-            this.timer = new Timer(LOG_TAG, true);
+            timer = new Timer(LOG_TAG, true);
 
             //start calling run in a timertask
             TimerTask timerTask = new TimerTask() {
@@ -98,12 +98,17 @@ public class DBMeter extends CordovaPlugin {
     }
 
     public void stop(final CallbackContext callbackContext) {
-        if (audioRecord != null) {
-            this.isListening = false;
-            this.audioRecord.stop();
-            this.timer.cancel();
-            callbackContext.success();
-        }
+        isListening = false;
+
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                if (audioRecord != null) {
+                    timer.cancel();
+                    audioRecord.stop();
+                    callbackContext.success();
+                }
+            }
+        });
     }
 
     /**
