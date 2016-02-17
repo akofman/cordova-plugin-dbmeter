@@ -27,15 +27,11 @@ public class DBMeter extends CordovaPlugin {
     private static short[] buffer;
     private static Timer timer;
     private static boolean isListening = false;
-    public static final int REQ_CODE = 0;
-
-    public DBMeter() {
-        super();
-    }
+    private static final int REQ_CODE = 0;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        LOG.setLogLevel(LOG.DEBUG);
+        //LOG.setLogLevel(LOG.DEBUG);
 
         if (!PermissionHelper.hasPermission(this, Manifest.permission.RECORD_AUDIO)) {
             PermissionHelper.requestPermission(this, REQ_CODE, Manifest.permission.RECORD_AUDIO);
