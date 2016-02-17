@@ -15,9 +15,9 @@ cordova plugin add https://github.com/akofman/cordova-plugin-dbmeter.git
 
 ## Methods
 
-`DBMeter.start(success, error)` : start detection
+`DBMeter.start(success, error)` : start listening
 
-`DBMeter.stop(success, error)` : stop detection
+`DBMeter.stop(success, error)` : stop listening
 
 ## Demo
 
@@ -25,6 +25,6 @@ A demo app is available in the demo folder.
 To install it, please follow the following steps :
 
 ```sh
-cd demo && cordova platform add android
+cd demo && cordova platform add android|ios
 cordova run --device
 ```
