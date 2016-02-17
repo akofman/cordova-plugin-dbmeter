@@ -7,5 +7,5 @@
     <platform name="ios">
       <preference name="Orientation" value="all" />
     </platform>
-    <plugin name="cordova-plugin-dbmeter" spec="../../cordova-plugin-dbmeter" />
+    <plugin name="cordova-plugin-dbmeter" spec="1.0.0-dev" />
 </widget>
