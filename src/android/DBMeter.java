@@ -23,23 +23,30 @@ import java.util.TimerTask;
 public class DBMeter extends CordovaPlugin {
 
     private static final String LOG_TAG = "DBMeter";
-    private static AudioRecord audioRecord;
-    private static short[] buffer;
-    private static Timer timer;
-    private static boolean isListening = false;
     private static final int REQ_CODE = 0;
+    private AudioRecord audioRecord;
+    private short[] buffer;
+    private Timer timer;
+    private boolean isListening = false;
+
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        //LOG.setLogLevel(LOG.DEBUG);
+        LOG.setLogLevel(LOG.DEBUG);
 
         if (!PermissionHelper.hasPermission(this, Manifest.permission.RECORD_AUDIO)) {
             PermissionHelper.requestPermission(this, REQ_CODE, Manifest.permission.RECORD_AUDIO);
         } else {
-            if (action.equals("start")) {
+            if (action.equals("create")) {
+                this.create(callbackContext);
+            } else if (action.equals("start")) {
                 this.start(callbackContext);
             } else if (action.equals("stop")) {
                 this.stop(callbackContext);
+            } else if (action.equals("isListening")) {
+                this.isListening(callbackContext);
+            } else if (action.equals("delete")) {
+                this.delete(callbackContext);
             } else {
                 LOG.e(LOG_TAG, "Not a valid action: " + action);
                 return false;
@@ -48,63 +55,122 @@ public class DBMeter extends CordovaPlugin {
         return true;
     }
 
-    public void start(final CallbackContext callbackContext) {
-        if (audioRecord == null) {
-            int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_SYSTEM);
-            int bufferSize = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-
-            audioRecord = new AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    rate,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    bufferSize);
-
-            buffer = new short[bufferSize];
+    /**
+     * @param callbackContext
+     */
+    public void create(CallbackContext callbackContext) {
+        if (this.isListening) {
+            this.timer.cancel();
+            this.audioRecord.stop();
         }
 
-        if (!isListening) {
-            isListening = true;
-            audioRecord.startRecording();
+        this.isListening = false;
 
-            timer = new Timer(LOG_TAG, true);
+        int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_SYSTEM);
+        int bufferSize = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-            //start calling run in a timertask
-            TimerTask timerTask = new TimerTask() {
-                public void run() {
-                    int readSize = audioRecord.read(buffer, 0, buffer.length);
-                    double sum = 0;
-                    for (int i = 0; i < readSize; i++) {
-                        sum += buffer[i] * buffer[i];
-                    }
-                    double amplitude = sum / readSize;
-                    double db = 20.0 * Math.log10(amplitude / 32767.0);
+        this.audioRecord = new AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                rate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize);
 
-                    LOG.d(LOG_TAG, Double.toString(db));
+        this.buffer = new short[bufferSize];
 
-                    PluginResult result = new PluginResult(PluginResult.Status.OK, (float) db);
-                    result.setKeepCallback(true);
-                    callbackContext.sendPluginResult(result);
-                }
-            };
-            timer.scheduleAtFixedRate(timerTask, 0, 100);
+        callbackContext.success();
+    }
+
+    /**
+     * @param callbackContext
+     */
+    public void delete(CallbackContext callbackContext) {
+        if (this.audioRecord != null) {
+            this.isListening = false;
+            this.audioRecord.stop();
+            this.audioRecord = null;
+            if (this.timer != null) {
+                this.timer.cancel();
+                this.timer = null;
+            }
         } else {
-            this.sendPluginError(callbackContext, PluginError.DBMETER_ALREADY_LISTENING, "DBMeter is already listening");
+            sendPluginError(callbackContext, PluginError.DBMETER_NOT_INITIALIZED, "DBMeter is not initialized");
         }
     }
 
-    public void stop(final CallbackContext callbackContext) {
-        isListening = false;
-
+    /**
+     * @param callbackContext
+     */
+    public void start(final CallbackContext callbackContext) {
+        final DBMeter that = this;
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
-                if (audioRecord != null) {
-                    timer.cancel();
-                    audioRecord.stop();
-                    callbackContext.success();
+                if (that.audioRecord != null) {
+                    if (!that.isListening) {
+                        that.isListening = true;
+                        that.audioRecord.startRecording();
+
+                        that.timer = new Timer(LOG_TAG, true);
+
+                        //start calling run in a timertask
+                        TimerTask timerTask = new TimerTask() {
+                            public void run() {
+                                int readSize = that.audioRecord.read(that.buffer, 0, that.buffer.length);
+                                double sum = 0;
+                                for (int i = 0; i < readSize; i++) {
+                                    sum += that.buffer[i] * that.buffer[i];
+                                }
+                                double amplitude = sum / readSize;
+                                double db = 20.0 * Math.log10(amplitude / 32767.0);
+
+                                LOG.d(LOG_TAG, Double.toString(db));
+
+                                PluginResult result = new PluginResult(PluginResult.Status.OK, (float) db);
+                                result.setKeepCallback(true);
+                                callbackContext.sendPluginResult(result);
+                            }
+                        };
+                        that.timer.scheduleAtFixedRate(timerTask, 0, 100);
+                    } else {
+                        sendPluginError(callbackContext, PluginError.DBMETER_ALREADY_LISTENING, "DBMeter is already listening");
+                    }
+                } else {
+                    sendPluginError(callbackContext, PluginError.DBMETER_NOT_INITIALIZED, "DBMeter is not initialized");
                 }
             }
         });
+    }
+
+    /**
+     * @param callbackContext
+     */
+    public void stop(final CallbackContext callbackContext) {
+        if (this.isListening) {
+            this.isListening = false;
+
+            final DBMeter that = this;
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    if (that.timer != null) {
+                        that.timer.cancel();
+                    }
+                    if (that.audioRecord != null) {
+                        that.audioRecord.stop();
+                    }
+                    callbackContext.success();
+                }
+            });
+        } else {
+            sendPluginError(callbackContext, PluginError.DBMETER_NOT_LISTENING, "DBMeter is not listening");
+        }
+    }
+
+    /**
+     * @param callbackContext
+     */
+    public void isListening(final CallbackContext callbackContext) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, this.isListening);
+        callbackContext.sendPluginResult(result);
     }
 
     /**
@@ -126,6 +192,8 @@ public class DBMeter extends CordovaPlugin {
     }
 
     public enum PluginError {
-        DBMETER_ALREADY_LISTENING
+        DBMETER_NOT_INITIALIZED,
+        DBMETER_ALREADY_LISTENING,
+        DBMETER_NOT_LISTENING
     }
 }
