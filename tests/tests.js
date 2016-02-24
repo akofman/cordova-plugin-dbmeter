@@ -41,16 +41,18 @@ exports.defineAutoTests = function() {
     });
 
     it('should not being listening after initializing', function (done) {
-      window.DBMeter.init();
-      window.DBMeter.start();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(true);
-        done();
-      });
       window.DBMeter.init(function(){
-        window.DBMeter.isListening(function(result){
-          expect(result).toBe(false);
-          done();
+        window.DBMeter.start(function(){
+          window.DBMeter.isListening(function(result){
+            expect(result).toBe(true);
+            done();
+          });
+          window.DBMeter.init(function(){
+            window.DBMeter.isListening(function(result){
+              expect(result).toBe(false);
+              done();
+            });
+          });
         });
       });
     });

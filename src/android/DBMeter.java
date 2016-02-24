@@ -45,8 +45,8 @@ public class DBMeter extends CordovaPlugin {
                 this.stop(callbackContext);
             } else if (action.equals("isListening")) {
                 this.isListening(callbackContext);
-            } else if (action.equals("delete")) {
-                this.delete(callbackContext);
+            } else if (action.equals("destroy")) {
+                this.destroy(callbackContext);
             } else {
                 LOG.e(LOG_TAG, "Not a valid action: " + action);
                 return false;
@@ -84,7 +84,7 @@ public class DBMeter extends CordovaPlugin {
     /**
      * @param callbackContext
      */
-    public void delete(CallbackContext callbackContext) {
+    public void destroy(CallbackContext callbackContext) {
         if (this.audioRecord != null) {
             this.isListening = false;
             this.audioRecord.stop();

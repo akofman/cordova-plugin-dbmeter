@@ -20,6 +20,17 @@
     <source-file src="src/android/PermissionHelper.java" target-dir="src/org/apache/cordova/dbmeter" />
   </platform>
 
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="DBMeter">
+        <param name="ios-package" value="DBMeter" />
+      </feature>
+    </config-file>
+
+    <hook type="after_plugin_install" src="hooks/add-swift-support.js" />
+    <source-file src="src/ios/DBMeter.swift" />
+  </platform>
+
   <js-module src="dbmeter.js" name="DBMeter">
     <clobbers target="DBMeter" />
   </js-module>

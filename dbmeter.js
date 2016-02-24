@@ -24,7 +24,7 @@ var DBMeter = {
     cordova.exec(
       success,
       error,
-      'DBMeter', 'delete', []
+      'DBMeter', 'destroy', []
     );
   },
 
