@@ -87,21 +87,6 @@ exports.defineAutoTests = function() {
           done();
         });
       });
-
-      it('should be called if we start the DBMeter while it is already started, the expected error should have the code 1', function (done) {
-        //var context = this;
-        window.DBMeter.init();
-        window.DBMeter.start();
-        window.DBMeter.start(function(){
-          window.DBMeter.stop();
-          fail(done);
-        }, function(e){
-          window.DBMeter.stop();
-          expect(e.code).toBe(1);
-          done();
-        });
-
-      });
     });
   });
 
@@ -111,25 +96,27 @@ exports.defineAutoTests = function() {
     });
 
     it('should stop the DBMeter', function (done) {
-      window.DBMeter.init();
-      window.DBMeter.start();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(true);
-        done();
-      });
-
-      window.DBMeter.stop();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(false);
-        done();
+      window.DBMeter.init(function(){
+        window.DBMeter.start(function(){
+          window.DBMeter.isListening(function(result){
+            expect(result).toBe(true);
+            done();
+          });
+          window.DBMeter.stop(function(){
+            window.DBMeter.isListening(function(result){
+              expect(result).toBe(false);
+              done();
+            });
+          });
+        });
       });
     });
 
     describe('error callback', function () {
 
-      it('should be called if we stop the DBMeter while it is not started, the expected error should have the code 2', function (done) {
+      it('should be called if we stop the DBMeter while it is not started, the expected error should have the code 1', function (done) {
         window.DBMeter.stop(fail.bind(null, done), function(e){
-          expect(e.code).toBe(2);
+          expect(e.code).toBe(1);
           done();
         });
       });
@@ -142,16 +129,19 @@ exports.defineAutoTests = function() {
     });
 
     it('should delete the DBMeter instance', function (done) {
-      window.DBMeter.init();
-      window.DBMeter.start();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(true);
-        done();
-      });
-      window.DBMeter.delete();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(false);
-        done();
+      window.DBMeter.init(function(){
+        window.DBMeter.start(function(){
+          window.DBMeter.isListening(function(result){
+            expect(result).toBe(true);
+            done();
+          });
+          window.DBMeter.delete(function(){
+            window.DBMeter.isListening(function(result){
+              expect(result).toBe(false);
+              done();
+            });
+          });
+        });
       });
     });
 
@@ -178,21 +168,24 @@ exports.defineAutoTests = function() {
     });
 
     it('should return false if the DBMeter is not listening', function (done) {
-      window.DBMeter.init();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(false);
-        done();
+      window.DBMeter.init(function(){
+        window.DBMeter.isListening(function(result){
+          expect(result).toBe(false);
+          done();
+        });
       });
     });
 
     it('should return true if the DBMeter is listening', function (done) {
-      window.DBMeter.init();
-      window.DBMeter.start();
-      window.DBMeter.isListening(function(result){
-        expect(result).toBe(true);
-        done();
+      window.DBMeter.init(function(){
+        window.DBMeter.start(function(){
+          window.DBMeter.isListening(function(result){
+            expect(result).toBe(true);
+            done();
+          });
+          window.DBMeter.stop();
+        });
       });
-      window.DBMeter.stop();
     });
   });
 };

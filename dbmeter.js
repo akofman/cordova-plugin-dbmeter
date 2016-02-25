@@ -75,8 +75,7 @@ var DBMeter = {
 
 DBMeter.ERROR_CODES = {
   '0':'DBMETER_NOT_INITIALIZED',
-  '1':'DBMETER_ALREADY_LISTENING',
-  '2':'DBMETER_NOT_LISTENING'
+  '1':'DBMETER_NOT_LISTENING'
 };
 
 module.exports = DBMeter;

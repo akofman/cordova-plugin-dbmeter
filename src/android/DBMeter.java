@@ -131,8 +131,6 @@ public class DBMeter extends CordovaPlugin {
                             }
                         };
                         that.timer.scheduleAtFixedRate(timerTask, 0, 100);
-                    } else {
-                        sendPluginError(callbackContext, PluginError.DBMETER_ALREADY_LISTENING, "DBMeter is already listening");
                     }
                 } else {
                     sendPluginError(callbackContext, PluginError.DBMETER_NOT_INITIALIZED, "DBMeter is not initialized");
@@ -193,7 +191,6 @@ public class DBMeter extends CordovaPlugin {
 
     public enum PluginError {
         DBMETER_NOT_INITIALIZED,
-        DBMETER_ALREADY_LISTENING,
         DBMETER_NOT_LISTENING
     }
 }
