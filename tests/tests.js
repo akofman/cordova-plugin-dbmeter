@@ -43,10 +43,6 @@ exports.defineAutoTests = function() {
     it('should not being listening after initializing', function (done) {
       window.DBMeter.init(function(){
         window.DBMeter.start(function(){
-          window.DBMeter.isListening(function(result){
-            expect(result).toBe(true);
-            done();
-          });
           window.DBMeter.init(function(){
             window.DBMeter.isListening(function(result){
               expect(result).toBe(false);
@@ -61,6 +57,21 @@ exports.defineAutoTests = function() {
   describe('start method', function () {
     beforeEach(function () {
       window.DBMeter.delete();
+    });
+
+    it('should start the DBMeter', function (done) {
+      var started = false;
+      window.DBMeter.init(function(){
+        window.DBMeter.start(function(){
+          window.DBMeter.isListening(function(result){
+            if(!started){
+              started = true;
+              expect(result).toBe(true);
+              done();
+            }
+          });
+        });
+      });
     });
 
     it('should return dB if we start the DBMeter', function (done) {
@@ -98,10 +109,6 @@ exports.defineAutoTests = function() {
     it('should stop the DBMeter', function (done) {
       window.DBMeter.init(function(){
         window.DBMeter.start(function(){
-          window.DBMeter.isListening(function(result){
-            expect(result).toBe(true);
-            done();
-          });
           window.DBMeter.stop(function(){
             window.DBMeter.isListening(function(result){
               expect(result).toBe(false);
@@ -129,11 +136,15 @@ exports.defineAutoTests = function() {
     });
 
     it('should delete the DBMeter instance', function (done) {
+      var started = false;
       window.DBMeter.init(function(){
         window.DBMeter.start(function(){
           window.DBMeter.isListening(function(result){
-            expect(result).toBe(true);
-            done();
+            if(!started){
+              started = true;
+              expect(result).toBe(true);
+              done();
+            }
           });
           window.DBMeter.delete(function(){
             window.DBMeter.isListening(function(result){
@@ -177,11 +188,15 @@ exports.defineAutoTests = function() {
     });
 
     it('should return true if the DBMeter is listening', function (done) {
+      var started = false;
       window.DBMeter.init(function(){
         window.DBMeter.start(function(){
           window.DBMeter.isListening(function(result){
-            expect(result).toBe(true);
-            done();
+            if(!started){
+              started = true
+              expect(result).toBe(true);
+              done();
+            }
           });
           window.DBMeter.stop();
         });
