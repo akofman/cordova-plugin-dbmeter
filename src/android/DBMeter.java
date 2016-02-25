@@ -116,12 +116,17 @@ public class DBMeter extends CordovaPlugin {
                         TimerTask timerTask = new TimerTask() {
                             public void run() {
                                 int readSize = that.audioRecord.read(that.buffer, 0, that.buffer.length);
-                                double sum = 0;
+                                double db = 0;
+                                double maxAmplitude = 0;
                                 for (int i = 0; i < readSize; i++) {
-                                    sum += that.buffer[i] * that.buffer[i];
+                                    if (Math.abs(that.buffer[i]) > maxAmplitude) {
+                                        maxAmplitude = Math.abs(that.buffer[i]);
+                                    }
                                 }
-                                double amplitude = sum / readSize;
-                                double db = 20.0 * Math.log10(amplitude / 32767.0);
+
+                                if(maxAmplitude != 0) {
+                                    db = 20.0 * Math.log10(maxAmplitude / 32767.0) + 90;
+                                }
 
                                 LOG.d(LOG_TAG, Double.toString(db));
 
