@@ -1,17 +1,4 @@
 var DBMeter = {
-  /**
-  * Initialiase the plugin.
-  *
-  * @param  {success} callback in case of success
-  * @param  {error} callback in case of error
-  */
-  init: function(success, error) {
-    cordova.exec(
-      success,
-      error,
-      'DBMeter', 'create', []
-    );
-  },
 
   /**
   * Delete the plugin.

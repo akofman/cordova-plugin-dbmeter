@@ -9,11 +9,6 @@ exports.defineAutoTests = function() {
       expect(window.DBMeter).toBeDefined();
     });
 
-    it('should contain a init function', function () {
-      expect(typeof window.DBMeter.init).toBeDefined();
-      expect(typeof window.DBMeter.init === 'function').toBe(true);
-    });
-
     it('should contain a start function', function () {
       expect(typeof window.DBMeter.start).toBeDefined();
       expect(typeof window.DBMeter.start === 'function').toBe(true);
@@ -35,25 +30,6 @@ exports.defineAutoTests = function() {
     });
   });
 
-  describe('init method', function () {
-    beforeEach(function () {
-      window.DBMeter.delete();
-    });
-
-    it('should not being listening after initializing', function (done) {
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(){
-          window.DBMeter.init(function(){
-            window.DBMeter.isListening(function(result){
-              expect(result).toBe(false);
-              done();
-            });
-          });
-        });
-      });
-    });
-  });
-
   describe('start method', function () {
     beforeEach(function () {
       window.DBMeter.delete();
@@ -61,43 +37,27 @@ exports.defineAutoTests = function() {
 
     it('should start the DBMeter', function (done) {
       var started = false;
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(){
-          window.DBMeter.isListening(function(result){
-            if(!started){
-              started = true;
-              expect(result).toBe(true);
-              done();
-            }
-          });
+      window.DBMeter.start(function(){
+        window.DBMeter.isListening(function(result){
+          if(!started){
+            started = true;
+            expect(result).toBe(true);
+            done();
+          }
         });
       });
     });
 
     it('should return dB if we start the DBMeter', function (done) {
       var alreadyDone = false;
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(dB){
-          if(!alreadyDone){
-            alreadyDone = true;
-            window.DBMeter.stop();
-            expect(true).toBe(true);
-            done();
-          }
-        }, fail.bind(null, done));
-      });
-    });
-
-    describe('error callback', function () {
-      it('should be called if we start the DBMeter while it is not initialized, the expected error should have the code 0', function (done) {
-        window.DBMeter.start(function(){
+      window.DBMeter.start(function(dB){
+        if(!alreadyDone){
+          alreadyDone = true;
           window.DBMeter.stop();
-          fail(done);
-        }, function(e){
-          expect(e.code).toBe(0);
+          expect(true).toBe(true);
           done();
-        });
-      });
+        }
+      }, fail.bind(null, done));
     });
   });
 
@@ -107,13 +67,11 @@ exports.defineAutoTests = function() {
     });
 
     it('should stop the DBMeter', function (done) {
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(){
-          window.DBMeter.stop(function(){
-            window.DBMeter.isListening(function(result){
-              expect(result).toBe(false);
-              done();
-            });
+      window.DBMeter.start(function(){
+        window.DBMeter.stop(function(){
+          window.DBMeter.isListening(function(result){
+            expect(result).toBe(false);
+            done();
           });
         });
       });
@@ -137,20 +95,18 @@ exports.defineAutoTests = function() {
 
     it('should delete the DBMeter instance', function (done) {
       var started = false;
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(){
+      window.DBMeter.start(function(){
+        window.DBMeter.isListening(function(result){
+          if(!started){
+            started = true;
+            expect(result).toBe(true);
+            done();
+          }
+        });
+        window.DBMeter.delete(function(){
           window.DBMeter.isListening(function(result){
-            if(!started){
-              started = true;
-              expect(result).toBe(true);
-              done();
-            }
-          });
-          window.DBMeter.delete(function(){
-            window.DBMeter.isListening(function(result){
-              expect(result).toBe(false);
-              done();
-            });
+            expect(result).toBe(false);
+            done();
           });
         });
       });
@@ -171,36 +127,82 @@ exports.defineAutoTests = function() {
       window.DBMeter.delete();
     });
 
-    it('should return false if the DBMeter is not iniatialized', function (done) {
+    it('should return false if the DBMeter is not initialized', function (done) {
       window.DBMeter.isListening(function(result){
         expect(result).toBe(false);
         done();
       });
     });
 
-    it('should return false if the DBMeter is not listening', function (done) {
-      window.DBMeter.init(function(){
-        window.DBMeter.isListening(function(result){
-          expect(result).toBe(false);
-          done();
-        });
-      });
-    });
-
     it('should return true if the DBMeter is listening', function (done) {
       var started = false;
-      window.DBMeter.init(function(){
-        window.DBMeter.start(function(){
-          window.DBMeter.isListening(function(result){
-            if(!started){
-              started = true
-              expect(result).toBe(true);
-              done();
-            }
-          });
-          window.DBMeter.stop();
+      window.DBMeter.start(function(){
+        window.DBMeter.isListening(function(result){
+          if(!started){
+            started = true
+            expect(result).toBe(true);
+            done();
+          }
         });
+        window.DBMeter.stop();
       });
     });
   });
+};
+
+exports.defineManualTests = function(contentEl, createActionButton) {
+
+  contentEl.innerHTML = '<div class="decibelBarContainer">'
+  + '<div class="decibelBar"></div>'
+  + '</div>'
+  + '<div class="decibel">0dB</div>';
+
+  var decibelBarContainer = document.querySelector('.decibelBarContainer');
+  var decibelBar = document.querySelector('.decibelBar');
+  var decibel = document.querySelector('.decibel');
+
+
+  decibelBarContainer.style.display = '-webkit-flex';
+  decibelBarContainer.style.display = 'flex';
+  decibelBarContainer.style.width = '50px';
+  decibelBarContainer.style.WebkitTransform = 'translateX(-50%)';
+  decibelBarContainer.style.marginLeft = '50%';
+  decibelBarContainer.style.position = 'absolute';
+  decibelBarContainer.style.top = '140px';
+  decibelBarContainer.style.height = '200px';
+
+  decibel.style.padding = '50px';
+  decibel.style.fontSize = '100px';
+  decibel.style.WebkitTransform = 'translateX(-50%)';
+  decibel.style.marginLeft = '50%';
+  decibel.style.position= 'absolute';
+  decibel.style.top = '300px';
+  decibel.style.textTransform = 'none';
+
+  decibelBar.style.background ='linear-gradient(to top, #009bca 0px, #009bca 25px, #009182 50px, #009182 100px, #009182 200px)';
+  decibelBar.style.flex = '0 1 auto';
+  decibelBar.style.alignSelf = 'flex-end';
+  decibelBar.style.WebkitFlex = '0 1 auto';
+  decibelBar.style.WebkitAlignSelf = 'flex-end';
+  decibelBar.style.width = '100%';
+  decibelBar.style.height = '2px';
+
+  createActionButton('Start DBMeter', function() {
+    DBMeter.start(function(dB){
+      decibelBar.style.height = parseFloat(dB, 10) + '%';
+      decibel.innerHTML = parseInt(dB, 10) + 'dB';
+    }, function(e){
+      console.log('code: ' + e.code + ', message: ' + e.message);
+    });
+  });
+
+  createActionButton('Stop DBMeter', function() {
+    DBMeter.stop(function(){
+      decibelBar.style.height = '0';
+      decibel.innerHTML = '0dB';
+    }, function(e){
+      console.log('code: ' + e.code + ', message: ' + e.message);
+    });
+  });
+
 };
