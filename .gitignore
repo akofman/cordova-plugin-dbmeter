@@ -2,6 +2,6 @@
 *.log
 .idea
 *.iml
-demo/*
-!demo/www
-!demo/config.xml
+app/*
+!app/www
+!app/config.xml

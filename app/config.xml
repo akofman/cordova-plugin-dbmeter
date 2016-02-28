@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.apache.cordova.dbmeterdemo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>DBMeterDemo</name>
+    <content src="cdvtests/index.html" />
+    <preference name="DisallowOverscroll" value="true" />
+    <platform name="ios">
+        <preference name="Orientation" value="all" />
+    </platform>
+    <plugin name="cordova-plugin-dbmeter" spec="../../cordova-plugin-dbmeter" />
+    <plugin name="cordova-plugin-dbmeter-tests" spec="../../cordova-plugin-dbmeter#:/tests" />
+    <plugin name="cordova-plugin-test-framework" spec="~1.1.1" />
+</widget>
