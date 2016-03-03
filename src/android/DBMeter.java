@@ -69,6 +69,7 @@ public class DBMeter extends CordovaPlugin {
                 this.timer.cancel();
                 this.timer = null;
             }
+            callbackContext.success();
         } else {
             sendPluginError(callbackContext, PluginError.DBMETER_NOT_INITIALIZED, "DBMeter is not initialized");
         }
