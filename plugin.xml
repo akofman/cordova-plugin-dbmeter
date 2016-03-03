@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-dbmeter" version="1.0.0">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-dbmeter" version="1.0.1">
 
   <name>DBMeter</name>
   <description>Cordova DBMeter plugin</description>
