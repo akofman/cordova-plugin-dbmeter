@@ -9,4 +9,5 @@
     <plugin name="cordova-plugin-dbmeter" spec="../../cordova-plugin-dbmeter" />
     <plugin name="cordova-plugin-dbmeter-tests" spec="../../cordova-plugin-dbmeter#:/tests" />
     <plugin name="cordova-plugin-test-framework" spec="~1.1.1" />
+    <plugin name="cordova-plugin-add-swift-support" spec="~1.0.0" />
 </widget>

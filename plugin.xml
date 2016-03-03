@@ -28,7 +28,6 @@
     </config-file>
 
     <source-file src="src/ios/DBMeter.swift" />
-    <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
   </platform>
 
   <js-module src="dbmeter.js" name="DBMeter">

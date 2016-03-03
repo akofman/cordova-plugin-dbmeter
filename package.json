@@ -30,11 +30,5 @@
     "cordova-ios",
     "cordova-android",
     "cordova:plugin"
-  ],
-  "dependencies": {
-    "xcode": "^0.8.3"
-  },
-  "bundledDependencies": [
-    "xcode"
   ]
 }
