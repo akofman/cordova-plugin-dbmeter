@@ -4,7 +4,7 @@
   "description": "Cordova DBMeter plugin",
   "homepage": "https://github.com/akofman/cordova-plugin-dbmeter",
   "author": {
-    "name": "Synchronized"
+    "name": "Alexis Kofman"
   },
   "cordova": {
     "id": "cordova-plugin-dbmeter",
