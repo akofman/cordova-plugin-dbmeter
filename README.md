@@ -42,8 +42,8 @@ DBMeter.start(function(dB){
 stop listening.
 
 ```
-DBMeter.start(function(dB){
-  console.log(dB);
+DBMeter.stop(function(){
+  console.log("DBMeter well stopped");
 }, function(e){
   console.log('code: ' + e.code + ', message: ' + e.message);  
 });
