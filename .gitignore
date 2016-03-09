@@ -5,3 +5,4 @@
 app/*
 !app/www
 !app/config.xml
+node_modules

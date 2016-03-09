@@ -30,5 +30,8 @@
     "cordova-ios",
     "cordova-android",
     "cordova:plugin"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^2.2.0"
+  }
 }
