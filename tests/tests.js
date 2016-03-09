@@ -35,10 +35,10 @@ exports.defineAutoTests = function() {
     it('should start the DBMeter', function (done) {
       var started = false;
 
-      window.DBMeter.start(function(){
-        if(!started){
+      window.DBMeter.start(function() {
+        if(!started) {
           started = true;
-          window.DBMeter.isListening(function(result){
+          window.DBMeter.isListening(function(result) {
             expect(result).toBe(true);
             done();
           }, fail.bind(null, done));
@@ -49,11 +49,11 @@ exports.defineAutoTests = function() {
     it('should return dB if we start the DBMeter', function (done) {
       var started = false;
 
-      window.DBMeter.delete(function(){
-        window.DBMeter.start(function(dB){
-          if(!started){
+      window.DBMeter.delete(function() {
+        window.DBMeter.start(function(dB) {
+          if(!started) {
             started = true;
-            window.DBMeter.stop(function(){
+            window.DBMeter.stop(function() {
               expect(dB).not.toBe(null);
               done();
             });
@@ -68,12 +68,12 @@ exports.defineAutoTests = function() {
     it('should stop the DBMeter', function (done) {
       var started = false;
 
-      window.DBMeter.delete(function(){
-        window.DBMeter.start(function(){
-          if(!started){
+      window.DBMeter.delete(function() {
+        window.DBMeter.start(function() {
+          if(!started) {
             started = true;
-            window.DBMeter.stop(function(){
-              window.DBMeter.isListening(function(result){
+            window.DBMeter.stop(function() {
+              window.DBMeter.isListening(function(result) {
                 expect(result).toBe(false);
                 done();
               }, fail.bind(null, done));
@@ -86,8 +86,8 @@ exports.defineAutoTests = function() {
     describe('error callback', function () {
 
       it('should be called if we stop the DBMeter while it is not started, the expected error should have the code 1', function (done) {
-        window.DBMeter.delete(function(){
-          window.DBMeter.stop(fail.bind(null, done), function(e){
+        window.DBMeter.delete(function() {
+          window.DBMeter.stop(fail.bind(null, done), function(e) {
             expect(e.code).toBe(1);
             done();
           });
@@ -101,13 +101,13 @@ exports.defineAutoTests = function() {
     it('should delete the DBMeter instance', function (done) {
       var started = false;
 
-      window.DBMeter.start(function(){
-        if(!started){
+      window.DBMeter.start(function() {
+        if(!started) {
           started = true;
-          window.DBMeter.isListening(function(result){
+          window.DBMeter.isListening(function(result) {
             expect(result).toBe(true);
-            window.DBMeter.delete(function(){
-              window.DBMeter.isListening(function(result){
+            window.DBMeter.delete(function() {
+              window.DBMeter.isListening(function(result) {
                 expect(result).toBe(false);
                 done();
               }, fail.bind(null, done));
@@ -119,7 +119,7 @@ exports.defineAutoTests = function() {
 
     describe('error callback', function () {
       it('should be called if we delete the DBMeter while it is not initialized, the expected error should have the code 0', function (done) {
-        window.DBMeter.delete(fail.bind(null, done), function(e){
+        window.DBMeter.delete(fail.bind(null, done), function(e) {
           expect(e.code).toBe(0);
           done();
         }, fail.bind(null, done));
@@ -130,7 +130,7 @@ exports.defineAutoTests = function() {
   describe('isListening method', function () {
 
     it('should return false if the DBMeter is not initialized', function (done) {
-      window.DBMeter.isListening(function(result){
+      window.DBMeter.isListening(function(result) {
         expect(result).toBe(false);
         done();
       }, fail.bind(null, done));
@@ -139,10 +139,10 @@ exports.defineAutoTests = function() {
     it('should return true if the DBMeter is listening', function (done) {
       var started = false;
 
-      window.DBMeter.start(function(){
-        if(!started){
+      window.DBMeter.start(function() {
+        if(!started) {
           started = true;
-          window.DBMeter.isListening(function(result){
+          window.DBMeter.isListening(function(result) {
             expect(result).toBe(true);
             done();
           });
@@ -192,19 +192,19 @@ exports.defineManualTests = function(contentEl, createActionButton) {
   decibelBar.style.height = '2px';
 
   createActionButton('Start DBMeter', function() {
-    DBMeter.start(function(dB){
+    DBMeter.start(function(dB) {
       decibelBar.style.height = parseFloat(dB, 10) + '%';
       decibel.innerHTML = parseInt(dB, 10) + 'dB';
-    }, function(e){
+    }, function(e) {
       console.log('code: ' + e.code + ', message: ' + e.message);
     });
   });
 
   createActionButton('Stop DBMeter', function() {
-    DBMeter.stop(function(){
+    DBMeter.stop(function() {
       decibelBar.style.height = '0';
       decibel.innerHTML = '0dB';
-    }, function(e){
+    }, function(e) {
       console.log('code: ' + e.code + ', message: ' + e.message);
     });
   });

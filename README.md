@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-dbmeter)
+
 # cordova-plugin-dbmeter
 
 This plugin defines a global DBMeter object, which permits to get the decibel values from the microphone.
