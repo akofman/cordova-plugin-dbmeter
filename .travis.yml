@@ -1,4 +1,8 @@
-language: node_js
-sudo: false
+language: objective-c
+osx_image: xcode7.2
+env:
+  - PATH=$PATH:$TRAVIS_BUILD_DIR/node_modules/.bin
+git:
+  depth: 2
 node_js:
   - "4.2"
