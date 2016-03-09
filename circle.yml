@@ -11,4 +11,4 @@ test:
         parallel: true
     - circle-android wait-for-boot
   override:
-    - cordova-paramedic --platform android --plugin . --verbose
+    - cordova-paramedic --platform android --plugin . --verbose --timeout 3600000
