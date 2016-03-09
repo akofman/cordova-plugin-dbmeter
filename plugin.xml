@@ -2,6 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-dbmeter" version="1.0.2">
 
   <name>DBMeter</name>
+  <license>Apache 2.0</license>
   <description>Cordova DBMeter plugin</description>
   <keywords>cordova,phonegap,volume,sound,audio,decibel</keywords>
 
