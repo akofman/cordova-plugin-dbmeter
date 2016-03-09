@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-dbmeter)
+iOS: [![Build Status](https://api.travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-dbmeter) Android: [![Build Status](https://circleci.com/gh/akofman/cordova-plugin-dbmeter.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/cowbell/cordova-plugin-dbmeter)
 
 # cordova-plugin-dbmeter
 
