@@ -39,6 +39,8 @@
     "ios-sim": "^5.0.6"
   },
   "scripts": {
-    "test-ios": "eslint dbmeter.js tests && cordova-paramedic --platform ios"
+    "test": "eslint dbmeter.js tests",
+    "test-ios": "cordova-paramedic --platform ios --plugin ./ -verbose",
+    "test-android": "cordova-paramedic --platform android --plugin ./ --verbose"
   }
 }

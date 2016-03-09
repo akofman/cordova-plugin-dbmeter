@@ -1,12 +1,4 @@
-language: objective-c
-osx_image: xcode7.2
-git:
-  depth: 2
+language: node_js
+sudo: false
 node_js:
   - "4.2"
-install:
-  - npm i
-before_script:
-  - ios-sim start --devicetypeid iPad-Air
-script:
-  - cordova-paramedic --platform ios --plugin ${TRAVIS_BUILD_DIR} --verbose
