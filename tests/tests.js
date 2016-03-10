@@ -43,7 +43,7 @@ exports.defineAutoTests = function() {
             done();
           }, fail.bind(null, done));
         }
-      });
+      }, fail.bind(null, done));
     });
 
     it('should return dB if we start the DBMeter', function (done) {
@@ -80,7 +80,7 @@ exports.defineAutoTests = function() {
             }, fail.bind(null, done));
           }
         }, fail.bind(null, done));
-      });
+      }, fail.bind(null, done));
     });
 
     describe('error callback', function () {
@@ -90,7 +90,7 @@ exports.defineAutoTests = function() {
           window.DBMeter.stop(fail.bind(null, done), function(e) {
             expect(e.code).toBe(1);
             done();
-          });
+          }, fail.bind(null, done));
         });
       });
     });
