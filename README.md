@@ -19,8 +19,8 @@ function onDeviceReady() {
 ```
 cordova plugin add cordova-plugin-dbmeter
 ```
-The iOS part is written in Swift so you also have to install the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support)
-in your project (See this [config](https://github.com/akofman/cordova-plugin-dbmeter/blob/master/app/config.xml) as an example).
+The iOS part is written in Swift so the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support) is configured
+as a dependency in [config.xml](https://github.com/akofman/cordova-plugin-dbmeter/blob/master/app/config.xml).
 
 ## Supported Platforms
 
