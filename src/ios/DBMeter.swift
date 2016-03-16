@@ -113,9 +113,12 @@ import AVFoundation
   /**
    Returns whether the DBMeter is listening.
    */
-  func isListening(command: CDVInvokedUrlCommand) {
-    let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsBool: self.isListening)
-    self.commandDelegate!.sendPluginResult(pluginResult, callbackId: command.callbackId)
+  func isListening(command: CDVInvokedUrlCommand?) -> Bool {
+    if (command != nil) {
+      let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsBool: self.isListening)
+      self.commandDelegate!.sendPluginResult(pluginResult, callbackId: command!.callbackId)
+    }
+    return self.isListening;
   }
 
   private func timerCallBack() {
