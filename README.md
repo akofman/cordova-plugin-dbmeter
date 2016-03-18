@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master)](https://travis-ci.org/akofman/cordova-plugin-dbmeter)
+[![Twitter: @alexiskofman](https://img.shields.io/badge/contact-@alexiskofman-blue.svg?style=flat)](https://twitter.com/alexiskofman)
+[![License](https://img.shields.io/badge/license-apache2-green.svg?style=flat)](https://github.com/akofman/cordova-plugin-dbmeter/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master&style=flat)](https://travis-ci.org/akofman/cordova-plugin-dbmeter)
 
 # cordova-plugin-dbmeter
 
