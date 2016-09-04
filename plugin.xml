@@ -35,5 +35,5 @@
     <clobbers target="DBMeter" />
   </js-module>
 
-  <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
+  <dependency id="cordova-plugin-add-swift-support" url="1.3.2"/>
 </plugin>
