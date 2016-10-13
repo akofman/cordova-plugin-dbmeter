@@ -6,7 +6,7 @@
     <platform name="ios">
         <preference name="Orientation" value="all" />
     </platform>
-    <plugin name="cordova-plugin-dbmeter" spec="1.1.0" />
+    <plugin name="cordova-plugin-dbmeter" spec="1.1.1" />
     <plugin name="cordova-plugin-dbmeter-tests" spec="https://github.com/akofman/cordova-plugin-dbmeter.git#:/tests" />
     <plugin name="cordova-plugin-test-framework" spec="~1.1.1" />
 </widget>
