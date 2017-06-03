@@ -8,8 +8,7 @@ import AVFoundation
   private var isListening: Bool = false
   private var audioRecorder: AVAudioRecorder!
   private var command: CDVInvokedUrlCommand!
-  private var timer: dispatch_source_t!
-  private var isTimerExists: Bool = false
+  private var timer: DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.global())
 
   /**
    This plugin provides the decibel level from the microphone.
@@ -24,8 +23,8 @@ import AVFoundation
    */
   func destroy(command: CDVInvokedUrlCommand) {
     if (self.isListening) {
-      dispatch_suspend(self.timer)
-      self.isListening = false
+        self.timer.suspend()
+        self.isListening = false
     }
 
     self.command = nil
@@ -36,9 +35,9 @@ import AVFoundation
       self.audioRecorder = nil
 
       let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
-      self.commandDelegate!.sendPluginResult(pluginResult, callbackId: command.callbackId)
+      self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
     } else {
-      self.sendPluginError(command.callbackId, errorCode: PluginError.DBMETER_NOT_INITIALIZED, errorMessage: "DBMeter is not initialized")
+        self.sendPluginError(callbackId: command.callbackId, errorCode: PluginError.DBMETER_NOT_INITIALIZED, errorMessage: "DBMeter is not initialized")
     }
   }
 
@@ -47,44 +46,39 @@ import AVFoundation
    CDVPluginResult keeping the same calback alive.
    */
   func start(command: CDVInvokedUrlCommand) {
-    self.commandDelegate!.runInBackground({
+    self.commandDelegate!.run {
       self.command = command
 
-      if (!self.isTimerExists) {
-        self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
-        dispatch_source_set_event_handler(self.timer, self.timerCallBack)
-        dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, NSEC_PER_SEC / 300, 0)
-        self.isTimerExists = true
-      }
-
+      self.timer.setEventHandler(handler: self.timerCallBack())
+      self.timer.scheduleRepeating(deadline: .now(), interval: Double(NSEC_PER_SEC) / 300.0, leeway: .seconds(0))
+        
       if (self.audioRecorder == nil) {
-        let url: NSURL = NSURL.fileURLWithPath("/dev/null")
+        let url: URL = NSURL.fileURL(withPath: "/dev/null")
 
-        let settings = [
+        let settings: [String : Any] = [
           AVFormatIDKey: Int(kAudioFormatAppleLossless),
           AVSampleRateKey: 44100.0,
           AVNumberOfChannelsKey: 1 as NSNumber,
-          AVEncoderAudioQualityKey: AVAudioQuality.High.rawValue
-        ]
+          AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
 
         do {
           let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
           try audioSession.setCategory(AVAudioSessionCategoryRecord)
           try audioSession.setActive(true)
 
-          self.audioRecorder = try AVAudioRecorder(URL: url, settings: settings)
-          self.audioRecorder.meteringEnabled = true
+          self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+          self.audioRecorder.isMeteringEnabled = true
         } catch {
-          self.sendPluginError(command.callbackId, errorCode: PluginError.DBMETER_NOT_INITIALIZED, errorMessage: "Error while initializing DBMeter")
+            self.sendPluginError(callbackId: command.callbackId, errorCode: PluginError.DBMETER_NOT_INITIALIZED, errorMessage: "Error while initializing DBMeter")
         }
       }
       if (!self.isListening) {
         self.isListening = true
         self.audioRecorder.record()
 
-        dispatch_resume(self.timer)
+        self.timer.resume()
       }
-    })
+    }
   }
 
   /**
@@ -93,21 +87,21 @@ import AVFoundation
    To destroy this instance, please use the destroy method.
    */
   func stop(command: CDVInvokedUrlCommand) {
-    self.commandDelegate!.runInBackground({
+    self.commandDelegate!.run {
       if (self.isListening) {
         self.isListening = false
 
-        if (self.audioRecorder != nil && self.audioRecorder.recording) {
-          dispatch_suspend(self.timer)
+        if (self.audioRecorder != nil && self.audioRecorder.isRecording) {
+          self.timer.suspend()
           self.audioRecorder.stop()
         }
 
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
-        self.commandDelegate!.sendPluginResult(pluginResult, callbackId: command.callbackId)
+        self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
       } else {
-        self.sendPluginError(command.callbackId, errorCode: PluginError.DBMETER_NOT_LISTENING, errorMessage: "DBMeter is not listening")
+        self.sendPluginError(callbackId: command.callbackId, errorCode: PluginError.DBMETER_NOT_LISTENING, errorMessage: "DBMeter is not listening")
       }
-    })
+    }
   }
 
   /**
@@ -115,24 +109,26 @@ import AVFoundation
    */
   func isListening(command: CDVInvokedUrlCommand?) -> Bool {
     if (command != nil) {
-      let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsBool: self.isListening)
-      self.commandDelegate!.sendPluginResult(pluginResult, callbackId: command!.callbackId)
+      let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: self.isListening)
+      self.commandDelegate!.send(pluginResult, callbackId: command!.callbackId)
     }
     return self.isListening;
   }
 
-  private func timerCallBack() {
-    autoreleasepool {
-      if (self.isListening && self.audioRecorder != nil) {
-        self.audioRecorder.updateMeters()
+  private func timerCallBack() -> DispatchWorkItem {
+    return DispatchWorkItem {
+        autoreleasepool {
+          if (self.isListening && self.audioRecorder != nil) {
+            self.audioRecorder.updateMeters()
 
-        let peakPowerForChannel = pow(10, (self.audioRecorder.averagePowerForChannel(0) / 20))
-        let db = Int32(round(20 * log10(peakPowerForChannel) + 90))
+            let peakPowerForChannel = pow(10, (self.audioRecorder.averagePower(forChannel: 0) / 20))
+            let db = Int32(round(20 * log10(peakPowerForChannel) + 90))
 
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsInt: db)
-        pluginResult.setKeepCallbackAsBool(true)
-        self.commandDelegate!.sendPluginResult(pluginResult, callbackId: self.command.callbackId)
-      }
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: db)
+            pluginResult?.setKeepCallbackAs(true)
+            self.commandDelegate!.send(pluginResult, callbackId: self.command.callbackId)
+          }
+        }
     }
   }
 
@@ -140,8 +136,8 @@ import AVFoundation
    Convenient method to send plugin errors.
    */
   private func sendPluginError(callbackId: String, errorCode: PluginError, errorMessage: String) {
-    let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAsDictionary: ["code": errorCode.hashValue, "message": errorMessage])
-    self.commandDelegate!.sendPluginResult(pluginResult, callbackId: callbackId)
+    let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["code": errorCode.hashValue, "message": errorMessage])
+    self.commandDelegate!.send(pluginResult, callbackId: callbackId)
   }
 
   enum PluginError: String {
