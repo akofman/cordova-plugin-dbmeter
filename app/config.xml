@@ -5,9 +5,12 @@
     <preference name="DisallowOverscroll" value="true" />
     <platform name="ios">
         <preference name="Orientation" value="all" />
+        <edit-config target="NSMicrophoneUsageDescription" file="*-Info.plist" mode="merge">
+          <string>need microphone access to record sounds</string>
+        </edit-config>
     </platform>
-    <engine name="ios" spec="~4.5.2" />
-    <plugin name="cordova-plugin-dbmeter" spec="file:.." />
-    <plugin name="cordova-plugin-dbmeter-tests" spec="file:../tests" />
-    <plugin name="cordova-plugin-test-framework" spec="~1.1.5" />
+    <engine name="ios" spec="^4.5.2" />
+    <plugin name="cordova-plugin-dbmeter" spec="^2.0.1" />
+    <plugin name="cordova-plugin-test-framework" spec="^1.1.5" />
+    <plugin name="cordova-plugin-dbmeter-tests" spec="../tests" />
 </widget>

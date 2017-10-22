@@ -13,9 +13,10 @@
     }
   },
   "dependencies": {
-    "cordova-ios": "~4.5.2",
-    "cordova-plugin-dbmeter": "file:..",
+    "cordova-ios": "^4.5.2",
+    "cordova-plugin-add-swift-support": "^1.7.0",
+    "cordova-plugin-dbmeter": "^2.0.1",
     "cordova-plugin-dbmeter-tests": "file:../tests",
-    "cordova-plugin-test-framework": "~1.1.5"
+    "cordova-plugin-test-framework": "^1.1.5"
   }
 }
