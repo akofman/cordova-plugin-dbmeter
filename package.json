@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-dbmeter",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Cordova DBMeter plugin",
   "homepage": "https://github.com/akofman/cordova-plugin-dbmeter",
   "author": {
@@ -33,7 +33,7 @@
     "cordova:plugin"
   ],
   "devDependencies": {
-    "cordova": "^6.0.0",
+    "cordova": "^7.1.0",
     "cordova-paramedic": "^0.5.0",
     "eslint": "^2.2.0",
     "ios-sim": "^5.0.6"
