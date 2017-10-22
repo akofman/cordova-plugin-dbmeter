@@ -1,0 +1,21 @@
+{
+  "name": "org.apache.cordova.dbmeterdemo",
+  "version": "1.0.0",
+  "displayName": "DBMeterDemo",
+  "cordova": {
+    "platforms": [
+      "ios"
+    ],
+    "plugins": {
+      "cordova-plugin-dbmeter": {},
+      "cordova-plugin-dbmeter-tests": {},
+      "cordova-plugin-test-framework": {}
+    }
+  },
+  "dependencies": {
+    "cordova-ios": "~4.5.2",
+    "cordova-plugin-dbmeter": "file:..",
+    "cordova-plugin-dbmeter-tests": "file:../tests",
+    "cordova-plugin-test-framework": "~1.1.5"
+  }
+}
