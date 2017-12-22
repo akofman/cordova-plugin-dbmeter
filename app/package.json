@@ -7,16 +7,17 @@
       "ios"
     ],
     "plugins": {
-      "cordova-plugin-dbmeter": {},
+      "cordova-plugin-test-framework": {},
       "cordova-plugin-dbmeter-tests": {},
-      "cordova-plugin-test-framework": {}
+      "cordova-plugin-add-swift-support": {},
+      "cordova-plugin-dbmeter": {}
     }
   },
   "dependencies": {
-    "cordova-ios": "^4.5.2",
-    "cordova-plugin-add-swift-support": "^1.7.0",
-    "cordova-plugin-dbmeter": "^2.0.1",
-    "cordova-plugin-dbmeter-tests": "file:../tests",
-    "cordova-plugin-test-framework": "^1.1.5"
+    "cordova-ios": "^4.5.4",
+    "cordova-plugin-add-swift-support": "^1.7.1",
+    "cordova-plugin-dbmeter": "^2.1.0",
+    "cordova-plugin-dbmeter-tests": "file:../plugin/tests",
+    "cordova-plugin-test-framework": "^1.1.6"
   }
 }

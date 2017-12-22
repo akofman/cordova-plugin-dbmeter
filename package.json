@@ -1,39 +1,6 @@
 {
-  "name": "cordova-plugin-dbmeter",
-  "version": "2.0.1",
-  "description": "Cordova DBMeter plugin",
-  "homepage": "https://github.com/akofman/cordova-plugin-dbmeter",
-  "author": {
-    "name": "Alexis Kofman"
-  },
-  "license": "Apache-2.0",
-  "cordova": {
-    "id": "cordova-plugin-dbmeter",
-    "platforms": [
-      "ios",
-      "android"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akofman/cordova-plugin-dbmeter.git"
-  },
-  "keywords": [
-    "cordova",
-    "ios",
-    "android",
-    "dbmeter",
-    "audio",
-    "volume",
-    "sound",
-    "decibel",
-    "ecosystem:cordova",
-    "cordova-ios",
-    "cordova-android",
-    "cordova:plugin"
-  ],
   "devDependencies": {
-    "cordova": "^7.1.0",
+    "cordova": "^8.0.0",
     "cordova-paramedic": "^0.5.0",
     "eslint": "^2.2.0",
     "ios-sim": "^5.0.6"

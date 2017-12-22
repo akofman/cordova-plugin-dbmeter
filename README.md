@@ -19,14 +19,10 @@ function onDeviceReady() {
 ## Installation
 
 ```
+cordova plugin add cordova-plugin-add-swift-support
 cordova plugin add cordova-plugin-dbmeter
 ```
-The iOS part is written in Swift so the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support) is configured
-as a dependency in [plugin.xml](https://github.com/akofman/cordova-plugin-dbmeter/blob/master/plugin.xml#L38).
-
-:warning: Because this plugin doesn't support Swift 3 at the moment, the following preference has to be added in your project :
-
-`<preference name="UseLegacySwiftLanguageVersion" value="true" />`
+The iOS part is written in Swift so the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support) is needed.
 
 ## Supported Platforms
 
@@ -40,7 +36,6 @@ as a dependency in [plugin.xml](https://github.com/akofman/cordova-plugin-dbmete
  This plugins requires the following usage description:
 
  - NSMicrophoneUsageDescription describes the reason the app accesses the user's microphone.
-
 
  To add this entry into the info.plist, you can use the `edit-config` tag in the platform section of your `config.xml` like this:
 
