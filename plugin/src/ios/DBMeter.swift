@@ -71,7 +71,7 @@ import AVFoundation
 
                 do {
                     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
-                    try audioSession.setCategory(AVAudioSessionCategoryRecord)
+                    try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
                     try audioSession.setActive(true)
 
                     self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
