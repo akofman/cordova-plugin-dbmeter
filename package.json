@@ -1,6 +1,4 @@
 {
-  "name": "DbMeter",
-  "version": "3.0.0",
   "devDependencies": {
     "cordova": "^8.0.0",
     "cordova-paramedic": "^0.5.0",
