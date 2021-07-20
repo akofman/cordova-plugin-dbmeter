@@ -19,6 +19,9 @@ import AVFoundation
         self.commandDelegate = commandDelegate
     }
 
+    override init() {
+    }
+  
     /**
      Permits to free the memory from the audioRecord instance
      */
