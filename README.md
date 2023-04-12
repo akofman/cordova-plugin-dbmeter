@@ -1,8 +1,9 @@
-[![Twitter: @alexiskofman](https://img.shields.io/badge/contact-@alexiskofman-blue.svg?style=flat)](https://twitter.com/alexiskofman)
-[![License](https://img.shields.io/badge/license-apache2-green.svg?style=flat)](https://github.com/akofman/cordova-plugin-dbmeter/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/akofman/cordova-plugin-dbmeter.svg?branch=master&style=flat)](https://travis-ci.org/akofman/cordova-plugin-dbmeter)
+[![NPM version](https://img.shields.io/npm/v/community-cordova-plugin-dbmeter)](https://www.npmjs.com/package/community-cordova-plugin-dbmeter)
+[![Downloads](https://img.shields.io/npm/dm/community-cordova-plugin-dbmeter)](https://www.npmjs.com/package/community-cordova-plugin-dbmeter)
 
-# cordova-plugin-dbmeter
+#### This is a fork of the original plugin cordova-plugin-dbmeter
+
+# community-cordova-plugin-dbmeter
 
 This plugin defines a global DBMeter object, which permits to get the decibel values from the microphone.
 Although the object is in the global scope, it is not available until after the deviceready event.
@@ -20,7 +21,7 @@ function onDeviceReady() {
 
 ```
 cordova plugin add cordova-plugin-add-swift-support
-cordova plugin add cordova-plugin-dbmeter
+cordova plugin add community-cordova-plugin-dbmeter
 ```
 The iOS part is written in Swift so the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support) is needed.
 
